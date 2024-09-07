@@ -39,26 +39,20 @@ class AuthController extends Controller
         ]);
 
         if ($validator::isFail()) {
-            ob_start(); var_dump($validator::getMessage()); $dump = ob_get_clean();
-            echo "<pre>" . preg_replace("/\]\=\>\n(\s+)/m", "] => ", $dump) . "</pre>";
-            die("2024-09-01 19:52:16");
-
-            die("------2024-09-01 19:50:13------");
             return $this->response
                 ->setError(true)
                 ->setCode(401)
                 ->setErrorMessages($validator::getMessage());
         } else {
-            die("------2024-09-01 19:52:32------");
             try {
                 $username_email = $params['username_email'];
                 $password = $params['password'];
 
-                if (emptyCheck(env('RAW_DATA'))) {
-                    $key = generateSoftwareKey();
-                    $username_email = decryptLevel(1, $username_email, $key);
-                    $password = decryptLevel(3, $password, $key);
-                }
+                // if (emptyCheck(env('RAW_DATA'))) {
+                //     $key = generateSoftwareKey();
+                //     $username_email = decryptLevel(1, $username_email, $key);
+                //     $password = decryptLevel(3, $password, $key);
+                // }
 
                 $user = User::where('email', '=', $username_email)
                     ->orWhere('username', '=', $username_email)->first();
@@ -75,7 +69,7 @@ class AuthController extends Controller
                     return $this->response
                         ->setError(true)
                         ->setErrorMessages([
-                            'username_email' => $message,
+                            'username_email' => 'Your account is not active',
                         ]);
                 }
 
@@ -93,24 +87,35 @@ class AuthController extends Controller
                         return $this->response
                             ->setError(true)
                             ->setErrorMessages([
-                                'otp' => 'auth.otp_fail',
+                                'otp' => __('auth.otp_fail'),
                             ]);
                     }
                 }
+                if($this->response->isResponseApi()) {
+                    $token = $user->createToken('auth');
+                    return $this->response
+                        ->setData([
+                            'accessToken' => $token->plainTextToken,
+                            'userData' => [
+                                'email' => $user->email,
+                                'fullName' => $user->full_name,
+                                'id' => $user->id,
+                                'role' => "admin",
+                                'username' => $user->username,
+                                'is_otp' => is_null($user->two_factor_secret),
+                            ],
+                        ])
+                        ->setMessage(__('common.success'));
+                }
+                Auth::login($user);
 
-                $token = $user->createToken('auth');
+                $nextUrl = '/';
+                if(isset($params['last-url'])) {
+                    $nextUrl = base64_decode($params['last-url']);
+                }
+
                 return $this->response
-                    ->setData([
-                        'accessToken' => $token->plainTextToken,
-                        'userData' => [
-                            'email' => $user->email,
-                            'fullName' => $user->full_name,
-                            'id' => $user->id,
-                            'role' => "admin",
-                            'username' => $user->username,
-                            'is_otp' => is_null($user->two_factor_secret),
-                        ],
-                    ])
+                    ->setNextUrl($nextUrl)
                     ->setMessage(__('common.success'));
             } catch (\Exception$e) {
                 return $this->response
@@ -162,19 +167,12 @@ class AuthController extends Controller
         } else {
             try {
                 DB::beginTransaction();
-                die("------2024-03-31 09:57:35------");
                 $data = [
-                    'full_name' => $this->request->name,
+                    'full_name' => $params['name'],
                     'username' => $params['username'],
                     'email' => $params['email'],
                     'password' => Hash::make($params['password']),
                 ];
-
-                ob_start();
-                var_dump($params, $data);
-                $dump = ob_get_clean();
-                echo "<pre>" . preg_replace("/\]\=\>\n(\s+)/m", "] => ", $dump) . "</pre>";
-                die("2023-08-19 15:47:27");
 
                 // if (isset($params['referral_code']) && !isEmpty($params['referral_code'])) {
                 //     User::where('username', $params['referral_code'])->orWhere('id', $params['referral_code'])->first();
@@ -193,7 +191,7 @@ class AuthController extends Controller
                 $user->assignRole($userRole);
                 DB::commit();
 
-                if ($params['isApi']) {
+                if (isset($params['isApi'])) {
                     $token = $user->createToken('auth');
                     return $this->response
                         ->setData(['accessToken' => $token->plainTextToken, 'userData' => [
@@ -205,16 +203,11 @@ class AuthController extends Controller
                         ]])
                         ->setMessage('common.success');
                 }
+
                 return redirect()
                     ->route('Auth::login')
                     ->with('message', __('common.success'));
             } catch (\Exception$ex) {
-                ob_start();
-                var_dump($ex->getMessage());
-                $dump = ob_get_clean();
-                echo "<pre>" . preg_replace("/\]\=\>\n(\s+)/m", "] => ", $dump) . "</pre>";
-                die("2023-05-28 16:03:51");
-
                 DB::rollBack();
                 return redirect()
                     ->route('Auth::register')
@@ -455,10 +448,11 @@ class AuthController extends Controller
 
     public function test()
     {
-        \Hook::callHook('auth.register', ['test']);
-        if (class_exists('\ZacoSoft\Hook\Hook')) {
-            die("------2022-04-10 14:15:12------");
-        }
+
+        // \Hook::callHook('auth.register', ['test']);
+        // if (class_exists('\ZacoSoft\Hook\Hook')) {
+        //     die("------2022-04-10 14:15:12------");
+        // }
 
         die("------2022-04-10 13:56:28------");
     }

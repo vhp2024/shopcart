@@ -84,6 +84,11 @@ class BaseResponse implements Responsable
     protected $isReturnResponse = false;
 
     /**
+     * @var array
+     */
+    protected $dataTable = [];
+
+    /**
      * @param $data
      * @return BaseHttpResponse
      */
@@ -99,6 +104,22 @@ class BaseResponse implements Responsable
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * @param $data
+     * @return BaseHttpResponse
+     */
+    public function setIsReturnResponse($isReturnResponse): self
+    {
+        $this->isReturnResponse = $isReturnResponse;
+        return $this;
+    }
+
+    public function setDataTable($dataTable = []): self
+    {
+        $this->dataTable = $dataTable;
+        return $this;
     }
 
     /**
@@ -276,13 +297,19 @@ class BaseResponse implements Responsable
         return $this->toResponse(request());
     }
 
+    public function isResponseApi()
+    {
+        $request = request();
+        return $request->expectsJson() || $request->get('_json') || preg_match("/api\//", $request->getRequestUri()) || $this->isReturnResponse;
+    }
+
     /**
      * @param Request $request
      * @return BaseHttpResponse|JsonResponse|RedirectResponse
      */
     public function toResponse($request)
     {
-        if ($request->expectsJson() || $request->get('_json') || preg_match("/api\//", $request->getRequestUri()) || $this->isReturnResponse) {
+        if ($this->isResponseApi()) {
 
             // if (is_profiler()) {
             //     $this->setAdditional(['profiler' => \DB::getQueryLog()]);
@@ -292,6 +319,12 @@ class BaseResponse implements Responsable
                 'message' => empty($this->message) ? trans('base/acl::common.alert_success_msg') : $this->message,
                 'success' => !$this->error,
             ];
+
+            if (!empty($this->dataTable)) {
+                foreach ($this->dataTable as $key => $value) {
+                    $result[$key] = $value;
+                }
+            }
 
             if (!empty($this->errorMessages)) {
                 $result['data']['errorMessages'] = $this->errorMessages;
@@ -342,23 +375,17 @@ class BaseResponse implements Responsable
      */
     protected function responseRedirect($url)
     {
-        if ($this->withInput) {
-            if (!isEmpty($this->errorData)) {
-                return redirect()
-                    ->to($url)
-                    ->with($this->error ? 'error_msg' : 'success_msg', $this->message)
-                    ->withErrors($this->errorData)
-                    ->withInput();
-            }
-
+        if (!isEmpty($this->errorMessages)) {
             return redirect()
                 ->to($url)
                 ->with($this->error ? 'error_msg' : 'success_msg', $this->message)
+                ->withErrors($this->errorMessages)
                 ->withInput();
         }
 
         return redirect()
             ->to($url)
-            ->with($this->error ? 'error_msg' : 'success_msg', $this->message);
+            ->with($this->error ? 'error_msg' : 'success_msg', $this->message)
+            ->withInput();
     }
 }

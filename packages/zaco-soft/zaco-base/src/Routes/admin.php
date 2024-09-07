@@ -38,9 +38,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function ()
             return \View::make("zaco-base::admin.users.index");
         })->name('index');
 
-        Route::get('/get-data', [
-            'as' => 'getData',
-            'uses' => 'UserController@getData',
+        Route::get('/get-list', [
+            'as' => 'getList',
+            'uses' => 'UserController@getList',
         ]);
 
         Route::get('/edit/{code}/{username}', [

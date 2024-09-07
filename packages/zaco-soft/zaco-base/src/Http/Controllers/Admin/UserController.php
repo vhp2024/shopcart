@@ -20,14 +20,15 @@ class UserController extends Controller
         $userModel = new User();
         $repository = new Repository($userModel);
         $where = [];
-        $data = $repository->getList(['*'], $where);
+        $data = $repository->getList([]);
 
         $result = [];
-        foreach ($data['data'] as $item) {
+        foreach ($data['rows'] as $item) {
             $result[] = [
                 'id' => $item->id,
                 'status' => $item->status,
                 'avatar' => $item->avatar,
+                'full_name' => $item->full_name,
                 'email' => $item->email,
                 'username' => $item->username,
                 'isOtp' => isEmpty($item->two_factor_secret),
@@ -35,10 +36,15 @@ class UserController extends Controller
         }
 
         return $this->response
-            ->setData([
-                'pagination' => $data['pagination'],
-                'data' => $result,
+            ->setIsReturnResponse(true)
+            ->setDataTable([
+                'draw' => time(),
+                'recordsTotal' => 2,
+                'recordsFiltered' => 2,
             ])
+            ->setData(
+                $result
+            )
             ->setMessage(__('common.success'));
     }
 
