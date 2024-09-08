@@ -1,6 +1,6 @@
 <?php
 
-namespace ZacoSoft\ZacoBase\Libraries;
+namespace ZacoSoft\ZacoBase\Libraries\Common;
 
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;

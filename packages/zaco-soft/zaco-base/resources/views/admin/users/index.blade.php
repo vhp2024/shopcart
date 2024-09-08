@@ -58,7 +58,7 @@
             searching: false,
             lengthMenu: [25, 50, 75, 100],
             ajax: {
-                url: "{{ route('User::getList') }}",
+                url: "{{ route('Admin-user::getList') }}",
                 dataType: "json",
                 data: function (d) {
                     var filter = {};

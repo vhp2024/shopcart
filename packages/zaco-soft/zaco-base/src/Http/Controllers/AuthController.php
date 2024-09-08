@@ -12,7 +12,7 @@ use Hash;
 use Illuminate\Http\Request;
 use Mail;
 use ZacoSoft\ZacoBase\Http\Controllers\BaseController as Controller;
-use ZacoSoft\ZacoBase\Libraries\Validator;
+use ZacoSoft\ZacoBase\Libraries\Common\ZacoValidator;
 use PragmaRX\Google2FA\Google2FA;
 use Spatie\Permission\Models\Role;
 
@@ -138,24 +138,24 @@ class AuthController extends Controller
         }
         $validator = new Validator($params);
         $validator::checkInputs([
-            'name' => 'required|between:5,255',
-            'username' => 'required|between:5,255|unique:users,username|min:3',
-            'email' => 'required|between:5,255|unique:users,email|min:10',
-            'password' => 'required|between:6,255',
+            'name' => 'required|between:5,191',
+            'username' => 'required|between:5,191|unique:users,username',
+            'email' => 'required|between:5,191|unique:users,email|min:10',
+            'password' => 'required|between:6,191',
             'confirmation_password' => 'required|same:password',
         ], [
             'name.required' => __('auth.name_required'),
-            'name.max' => __('auth.name_max', ['max' => 255]),
+            'name.max' => __('auth.name_max', ['max' => 191]),
             'username.required' => __('auth.username_required'),
             'username.min' => __('auth.username_min', ['max' => 3]),
-            'username.max' => __('auth.username_max', ['max' => 255]),
+            'username.max' => __('auth.username_max', ['max' => 191]),
             'username.unique' => __('auth.username_unique'),
             'email.required' => __('auth.email_required'),
             'email.min' => __('auth.email_min', ['max' => 10]),
-            'email.max' => __('auth.email_max', ['max' => 255]),
+            'email.max' => __('auth.email_max', ['max' => 191]),
             'email.unique' => __('auth.email_unique'),
             'password.required' => __('auth.password_required'),
-            'password.between' => __('auth.password_between', ['min' => 6, 'max' => 255]),
+            'password.between' => __('auth.password_between', ['min' => 6, 'max' => 191]),
             'confirmation_password.required' => __('auth.confirmation_password_required'),
             'confirmation_password.same' => __('auth.confirmation_password_same'),
         ]);
@@ -321,12 +321,12 @@ class AuthController extends Controller
 
         $validator::checkInputs([
             'token' => 'required',
-            'password' => 'required|between:6,255',
+            'password' => 'required|between:6,191',
             'confirmation_password' => 'required|same:password',
         ], [
             'token.required' => __('common.required', ['name' => __('auth.token')]),
             'password.required' => __('common.required', ['name' => __('auth.new_password')]),
-            'password.between' => __('common.between', ['name' => __('auth.new_password'), 'min' => 6, 'max' => 255]),
+            'password.between' => __('common.between', ['name' => __('auth.new_password'), 'min' => 6, 'max' => 191]),
             'confirmation_password.required' => __('common.required', ['name' => __('auth.confirmation_password')]),
             'confirmation_password.same' => __('auth.confirmation_password_same'),
         ]);

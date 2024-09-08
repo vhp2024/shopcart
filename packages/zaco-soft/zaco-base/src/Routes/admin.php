@@ -33,10 +33,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function ()
     //     ]);
     // });
 
-    Route::group(['prefix' => '/users', 'as' => 'User::', 'namespace' => 'ZacoSoft\ZacoBase\Http\Controllers\Admin'], function () {
+    Route::group(['prefix' => '/users', 'as' => 'Admin-user::', 'namespace' => 'ZacoSoft\ZacoBase\Http\Controllers\Admin'], function () {
         Route::get("/", function () {
             return \View::make("zaco-base::admin.users.index");
         })->name('index');
+
+        Route::get('/create-user', [
+            'as' => 'viewCreateUser',
+            'uses' => 'UserController@viewCreateUser',
+        ]);
+
+        Route::post('/post-create-user', [
+            'as' => 'postCreateUser',
+            'uses' => 'UserController@postCreateUser',
+        ]);
 
         Route::get('/get-list', [
             'as' => 'getList',

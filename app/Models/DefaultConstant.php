@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Pimosoft\PimoBase\Models\BaseModel;
+use ZacoSoft\ZacoBase\Models\BaseModel;
 
 /**
  * @property integer $c_id
@@ -17,7 +17,7 @@ class DefaultConstant extends BaseModel
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'c_id';

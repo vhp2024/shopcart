@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use ZacoSoft\ZacoBase\Libraries\Date;
+use ZacoSoft\ZacoBase\Libraries\Common\Date;
 use ZacoSoft\ZacoBase\Repositories\Interfaces\RepositoryInterface;
 
 abstract class RepositoriesAbstract implements RepositoryInterface

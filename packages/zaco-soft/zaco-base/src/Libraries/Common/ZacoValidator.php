@@ -1,11 +1,11 @@
 <?php
 
-namespace ZacoSoft\ZacoBase\Libraries;
+namespace ZacoSoft\ZacoBase\Libraries\Common;
 
 use Illuminate\Support\Facades\Validator as laraValidator;
 use PragmaRX\Google2FA\Google2FA;
 
-class Validator
+class ZacoValidator
 {
     protected static $params = [];
 

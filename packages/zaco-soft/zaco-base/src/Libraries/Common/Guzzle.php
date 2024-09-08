@@ -1,6 +1,6 @@
 <?php
 
-namespace ZacoSoft\ZacoBase\Libraries;
+namespace ZacoSoft\ZacoBase\Libraries\Common;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;

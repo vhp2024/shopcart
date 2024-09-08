@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Pimosoft\PimoBase\Models\BaseModel;
+use ZacoSoft\ZacoBase\Models\BaseModel;
 
 /**
  * @property integer $id
@@ -17,7 +17,7 @@ class Job extends BaseModel
 {
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'integer';

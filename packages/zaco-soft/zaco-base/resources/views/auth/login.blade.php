@@ -17,7 +17,7 @@
                 </div>
                 <div class="mb-1">
                     <div class="d-flex justify-content-between">
-                        <label class="form-label" for="login-password">{{ __('auth.password') }}</label>
+                        <label class="form-label" for="login-password">Password</label>
                         <a href="auth-forgot-password-basic.html">
                             <small>Forgot Password?</small>
                         </a>
@@ -38,6 +38,9 @@
                         <label class="form-check-label" for="remember-me"> Remember Me </label>
                     </div>
                 </div> -->
+                @if(Request::get('last-url'))
+                    <input type="hidden" name="last-url" value="{{Request::get('last-url')}}">
+                @endif
                 <button type="submit" class="btn btn-primary w-100" tabindex="4">{{ __('auth.sign_me_in') }}</button>
             </form>
             <p class="text-center mt-2">

@@ -15,7 +15,7 @@ class ZacoBaseServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('guzzle', function ($app) {
-            $guzzle = $app->make('ZacoSoft\ZacoBase\Libraries\Guzzle');
+            $guzzle = $app->make('ZacoSoft\ZacoBase\Libraries\Common\Guzzle');
             return $guzzle;
         });
     }

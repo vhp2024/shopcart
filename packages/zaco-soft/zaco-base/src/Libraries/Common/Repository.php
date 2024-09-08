@@ -1,5 +1,5 @@
 <?php
-namespace ZacoSoft\ZacoBase\Libraries;
+namespace ZacoSoft\ZacoBase\Libraries\Common;
 
 use ZacoSoft\ZacoBase\Repositories\Eloquent\RepositoriesAbstract;
 

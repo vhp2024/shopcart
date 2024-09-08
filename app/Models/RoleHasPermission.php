@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Pimosoft\PimoBase\Models\BaseModel;
+use ZacoSoft\ZacoBase\Models\BaseModel;
 
 /**
  * @property integer $permission_id

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use ZacoSoft\ZacoBase\Http\Controllers\BaseController as Controller;
-use ZacoSoft\ZacoBase\Libraries\TranslationManager;
+use ZacoSoft\ZacoBase\Libraries\Common\TranslationManager;
 use ZacoSoft\ZacoBase\Models\Translation;
 
 class TranslationController extends Controller
